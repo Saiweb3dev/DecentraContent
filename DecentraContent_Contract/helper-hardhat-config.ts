@@ -44,7 +44,7 @@ export const NetworkConfig: NetworkConfigMap ={
   oracle: "0x6090149792dAAeE9D1D568c9f9a6F6B46AA29eFD",
   jobId: "ca98366cc7314957b8c012c72f05aeeb",
   fee: "100000000000000000",
-  fundAmount: BigNumber.from("100000000000000000"),
+  fundAmount:ethers.toBigInt("1000000000000000000"),
   keepersUpdateInterval: "30",
 },
 }
