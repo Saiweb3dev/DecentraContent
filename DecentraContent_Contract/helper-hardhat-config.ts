@@ -1,5 +1,6 @@
-import { BigNumber } from "ethers";
+
 import { BigNumberish } from "ethers";
+import { ethers } from "ethers";
 type NetworkConfigItem = {
   name: string
   fundAmount: BigNumberish
@@ -23,7 +24,7 @@ export const NetworkConfig: NetworkConfigMap ={
     fee: "100000000000000000",
         keyHash: "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc",
         jobId: "29fa9aa13bf1468788b7cc4a500a45b8",
-        fundAmount: BigNumber.from("1000000000000000000"),
+        fundAmount: ethers.toBigInt("1000000000000000000"),
         keepersUpdateInterval: "30",
   },
   31337: {
@@ -31,7 +32,7 @@ export const NetworkConfig: NetworkConfigMap ={
     fee: "100000000000000000",
     keyHash: "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc",
     jobId: "29fa9aa13bf1468788b7cc4a500a45b8",
-    fundAmount: BigNumber.from("1000000000000000000"),
+    fundAmount: ethers.toBigInt("1000000000000000000"),
     keepersUpdateInterval: "30",
     ethUsdPriceFeed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
 },   11155111: {
