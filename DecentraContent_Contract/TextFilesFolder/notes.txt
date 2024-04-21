@@ -1,0 +1,8 @@
+
+
+
+1) Editor decides a price and date also setting some amount as confirmation(collateral)
+2) Customer Accepts and sends the link(ipfs) of the file
+3) After the edit finished before time the edited file is minted with address of customer as owner and address of editor as editor
+4) Then using chainlink Random Number it choose on file and send the ipfs link to sender
+5) After seeing the sample , the customer pays and receives the URI link
