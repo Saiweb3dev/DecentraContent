@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract DigitalContentExchange {
+import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+
+contract DigitalContentExchange is ERC721URIStorage{
     // =========================
     // CUSTOM ERROR DEFINITIONS
     // =========================
@@ -23,9 +25,10 @@ contract DigitalContentExchange {
     // Define events to log important actions or state changes (e.g., content creation, purchase, ownership transfer)
 
     // ======================
-    // CONSTRUCTOR (optional)
+    // CONSTRUCTOR
     // ======================
     // Implement a constructor if you need to initialize any state variables or perform setup tasks
+    constructor() ERC721URIStorage("DigitalContentExchange", "DCEX") {}
 
     // ====================
     // FUNCTION MODIFIERS
