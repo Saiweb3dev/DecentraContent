@@ -3,9 +3,12 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy"
 import * as dotenv from "dotenv"
 dotenv.config()
-const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL
-const PRIVATE_KEY = process.env.PRIVATE_KEY
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
+
+//Temporary URL and KEy
+const SEPOLIA_RPC_URL ="https://eth-sepolia.g.alchemy.com/v2/8cAuHYtk5pZaV5S4z9QKIKLbAj3JEc3i"
+const PRIVATE_KEY ='976ec26d8620bbdeff41ac071ad26407ee1bd7e03cf7b10d27067e91ccfc2ff9'
+// const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
+
 const config: HardhatUserConfig = {
   defaultNetwork:"hardhat",
   networks: {
@@ -19,9 +22,13 @@ const config: HardhatUserConfig = {
       chainId: 31337
     }
   },
-  etherscan: {
-    apiKey: ETHERSCAN_API_KEY
-  },
+  // etherscan: {
+  //   apiKey: ETHERSCAN_API_KEY
+  // },
+  typechain: {
+    outDir: "typechain",
+    target: "ethers-v5",
+ },
   solidity: "0.8.24",
 };
 
