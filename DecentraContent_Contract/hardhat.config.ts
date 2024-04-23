@@ -12,6 +12,9 @@ const PRIVATE_KEY ='976ec26d8620bbdeff41ac071ad26407ee1bd7e03cf7b10d27067e91ccfc
 const config: HardhatUserConfig = {
   defaultNetwork:"hardhat",
   networks: {
+    hardhat: {
+      chainId: 31337
+    },
     sepolia: {
       url: SEPOLIA_RPC_URL,
       accounts: [PRIVATE_KEY!],
@@ -27,7 +30,7 @@ const config: HardhatUserConfig = {
   // },
   typechain: {
     outDir: "typechain",
-    target: "ethers-v5",
+    target: "ethers-v6",
  },
   solidity: "0.8.24",
 };
