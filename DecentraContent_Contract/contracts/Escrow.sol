@@ -83,7 +83,7 @@ contract Escrow {
     }
 
     // Function to finalize the project and transfer the remaining amount to the i_editor
-    function ProjectDelivery() payable onlycustomer external returns(bool){
+    function ProjectDelivery() payable external returns(bool){
         // Ensure the contract is in the correct state
         if(currState != State.AWAITING_DELIVERY){
             revert WrongState(currState);
