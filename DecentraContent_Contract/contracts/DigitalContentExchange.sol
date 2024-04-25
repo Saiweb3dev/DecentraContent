@@ -13,6 +13,7 @@ contract DigitalContentExchange is ERC721URIStorage {
      tokenCounter = 1
      fileLocation = ipfs://QmYx6GsYAKnNzZ9A6NvEKV9nf1VaDzJrqDR23Y8YSkebLU
     */
+    
 
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
@@ -25,17 +26,18 @@ contract DigitalContentExchange is ERC721URIStorage {
 
     // Mapping from token ID to TokenInfo.
     mapping(uint256 => TokenInfo) private s_tokenInfo;
-    // Mapping from token ID to file location.
     mapping(uint256 => string) private s_fileLocation;
+    mapping(uint256 => string) private s_editedFileLocation;
+    mapping(uint256 => bool) private s_customerApproval;
+    //Modifiers
 
-    // Modifiers
-    // Restrict access to the editor of a specific token.
+    //restrict access to the ediotr of a specific token.
     modifier onlyTokenEditor(uint256 _tokenCounter) {
         require(msg.sender == s_tokenInfo[_tokenCounter].editor, "Caller is not the editor");
         _;
     }
 
-    // Restrict access to the customer of a specific token.
+    //restrict access to the customer of a specific token.
     modifier onlyTokenCustomer(uint256 _tokenCounter) {
         require(msg.sender == s_tokenInfo[_tokenCounter].customer, "Caller is not the customer");
         _;
@@ -53,9 +55,26 @@ contract DigitalContentExchange is ERC721URIStorage {
         return s_tokenCounter;
     }
 
-    // The initial file location of the customer is set.
-    function initialFileLocation(string memory _fileLocation, uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
+    //The intial file location of the customer is set
+    function initialFileLocation(string memory _fileLocation,uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
         s_fileLocation[_tokenCounter] = _fileLocation;
+    }
+
+    function previewOfEditedFile(string memory _editedFileLocation,uint256 _tokenCounter) public onlyTokenEditor(_tokenCounter){
+       s_editedFileLocation[_tokenCounter] = _editedFileLocation;
+    }
+
+    // Function to approve the edited file preview by the customer
+    function approveEditedPreview(uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
+        s_customerApproval[_tokenCounter] = true;
+    }
+
+   //Minting the token using Id and URI to customer address
+     function mintEditedToken(uint256 _tokenCounter, string memory _editedFileURI) public onlyTokenEditor(_tokenCounter) {
+        require(s_customerApproval[_tokenCounter], "Customer approval is required");
+        uint256 newTokenId = _tokenCounter; // Use the existing token counter as the new token ID
+        _safeMint(s_tokenInfo[newTokenId].customer, newTokenId);
+        _setTokenURI(newTokenId, _editedFileURI);
     }
 
     // Retrieves editor and customer addresses for a given token ID.
@@ -64,15 +83,15 @@ contract DigitalContentExchange is ERC721URIStorage {
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         return (info.editor, info.customer);
     }
-
-    // The file location of the customer is callable by the editor.
+    
+    //The file location of customer is callable by the editor
     function getInitialFileLocation(uint256 _tokenCounter) public view onlyTokenEditor(_tokenCounter) returns(string memory) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         return s_fileLocation[_tokenCounter];
     }
 
-function getTokenCounter() public view returns(uint256) {
-    return s_tokenCounter;
-}
-
+    function getPreviewOfEditedFile(uint _tokenCounter) public view onlyTokenCustomer(_tokenCounter) returns(string memory){
+        require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
+        return s_editedFileLocation[_tokenCounter];
+    }
 }
