@@ -70,4 +70,9 @@ contract DigitalContentExchange is ERC721URIStorage {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         return s_fileLocation[_tokenCounter];
     }
+
+function getTokenCounter() public view returns(uint256) {
+    return s_tokenCounter;
+}
+
 }
