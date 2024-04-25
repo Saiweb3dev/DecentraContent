@@ -77,6 +77,12 @@ contract DigitalContentExchange is ERC721URIStorage {
         _setTokenURI(newTokenId, _editedFileURI);
     }
 
+    function isCustomerOwner(uint256 _tokenCounter) public view returns (bool) {
+        require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
+        address customerAddress = s_tokenInfo[_tokenCounter].customer;
+        return ownerOf(_tokenCounter) == customerAddress;
+    }
+
     // Retrieves editor and customer addresses for a given token ID.
     function getTokenInfo(uint256 _tokenCounter) public view returns(address, address) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
