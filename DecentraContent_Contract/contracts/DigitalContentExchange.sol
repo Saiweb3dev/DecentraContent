@@ -6,22 +6,13 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 // DigitalContentExchange contract for managing digital content tokens.
 contract DigitalContentExchange is ERC721URIStorage {
-
-    /*Input Samples for testing
-     customer Address = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4
-     editor Address   = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2
-     tokenCounter = 1
-     fileLocation = ipfs://QmYx6GsYAKnNzZ9A6NvEKV9nf1VaDzJrqDR23Y8YSkebLU
-    */
-    
-
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
 
     // Struct to hold editor and customer addresses for each token.
     struct TokenInfo {
-        address editor; // Editor's address.
-        address customer; // Customer's address.
+        address editor;    // Editor's address.
+        address customer;  // Customer's address.
     }
 
     // Mapping from token ID to TokenInfo.
@@ -29,23 +20,24 @@ contract DigitalContentExchange is ERC721URIStorage {
     mapping(uint256 => string) private s_fileLocation;
     mapping(uint256 => string) private s_editedFileLocation;
     mapping(uint256 => bool) private s_customerApproval;
-    //Modifiers
 
-    //restrict access to the ediotr of a specific token.
+    // Constructor initializes the token counter.
+    constructor() ERC721("DigitalContentExchange", "DCEX") {
+        s_tokenCounter = 0;
+    }
+
+    // Modifiers
+
+    // Restrict access to the editor of a specific token.
     modifier onlyTokenEditor(uint256 _tokenCounter) {
         require(msg.sender == s_tokenInfo[_tokenCounter].editor, "Caller is not the editor");
         _;
     }
 
-    //restrict access to the customer of a specific token.
+    // Restrict access to the customer of a specific token.
     modifier onlyTokenCustomer(uint256 _tokenCounter) {
         require(msg.sender == s_tokenInfo[_tokenCounter].customer, "Caller is not the customer");
         _;
-    }
-
-    // Constructor initializes the token counter.
-    constructor() ERC721("DigitalContentExchange", "DCEX") {
-        s_tokenCounter = 0;
     }
 
     // Initializes a new token with editor and customer addresses, returns token ID.
@@ -55,28 +47,30 @@ contract DigitalContentExchange is ERC721URIStorage {
         return s_tokenCounter;
     }
 
-    //The intial file location of the customer is set
-    function initialFileLocation(string memory _fileLocation,uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
+    // Sets the initial file location of the customer.
+    function initialFileLocation(string memory _fileLocation, uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
         s_fileLocation[_tokenCounter] = _fileLocation;
     }
 
-    function previewOfEditedFile(string memory _editedFileLocation,uint256 _tokenCounter) public onlyTokenEditor(_tokenCounter){
-       s_editedFileLocation[_tokenCounter] = _editedFileLocation;
+    // Sets the preview of the edited file by the editor.
+    function previewOfEditedFile(string memory _editedFileLocation, uint256 _tokenCounter) public onlyTokenEditor(_tokenCounter) {
+        s_editedFileLocation[_tokenCounter] = _editedFileLocation;
     }
 
-    // Function to approve the edited file preview by the customer
+    // Function to approve the edited file preview by the customer.
     function approveEditedPreview(uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
         s_customerApproval[_tokenCounter] = true;
     }
 
-   //Minting the token using Id and URI to customer address
-     function mintEditedToken(uint256 _tokenCounter, string memory _editedFileURI) public onlyTokenEditor(_tokenCounter) {
+    // Minting the token using ID and URI to customer address.
+    function mintEditedToken(uint256 _tokenCounter, string memory _editedFileURI) public onlyTokenEditor(_tokenCounter) {
         require(s_customerApproval[_tokenCounter], "Customer approval is required");
         uint256 newTokenId = _tokenCounter; // Use the existing token counter as the new token ID
         _safeMint(s_tokenInfo[newTokenId].customer, newTokenId);
         _setTokenURI(newTokenId, _editedFileURI);
     }
 
+    // Checks if the caller is the owner of the token.
     function isCustomerOwner(uint256 _tokenCounter) public view returns (bool) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         address customerAddress = s_tokenInfo[_tokenCounter].customer;
@@ -90,14 +84,32 @@ contract DigitalContentExchange is ERC721URIStorage {
         return (info.editor, info.customer);
     }
     
-    //The file location of customer is callable by the editor
+    // Retrieves the initial file location of the customer, callable by the editor.
     function getInitialFileLocation(uint256 _tokenCounter) public view onlyTokenEditor(_tokenCounter) returns(string memory) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         return s_fileLocation[_tokenCounter];
     }
 
-    function getPreviewOfEditedFile(uint _tokenCounter) public view onlyTokenCustomer(_tokenCounter) returns(string memory){
+    // Retrieves the preview of the edited file, callable by the customer.
+    function getPreviewOfEditedFile(uint256 _tokenCounter) public view onlyTokenCustomer(_tokenCounter) returns(string memory) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         return s_editedFileLocation[_tokenCounter];
+    }
+
+    // Transfer token ownership.
+    function transferToken(uint256 _tokenCounter, address _to) public onlyTokenCustomer(_tokenCounter) {
+        require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
+        require(ownerOf(_tokenCounter) == msg.sender, "You are not the owner of this token");
+        _transfer(msg.sender, _to, _tokenCounter);
+    }
+
+    // Returns the total number of tokens.
+    function totalSupply() public view returns (uint256) {
+        return s_tokenCounter;
+    }
+
+    // Checks if a token exists.
+    function tokenExists(uint256 _tokenCounter) public view returns (bool) {
+        return _tokenCounter <= s_tokenCounter && _tokenCounter > 0 && ownerOf(_tokenCounter) != address(0);
     }
 }
