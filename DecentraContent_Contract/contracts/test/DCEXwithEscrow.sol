@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./EscrowTest.sol";
 // DigitalContentExchange contract for managing digital content tokens.
-contract DigitalContentExchangeTest is ERC721URIStorage {
+contract DCEXwithEscrowTest is ERC721URIStorage {
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
 

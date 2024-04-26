@@ -14,7 +14,7 @@ describe("Escrow Contract", () => {
 
  // Setup before each test
  beforeEach(async () => {
-    const Escrow = await ethers.getContractFactory("Escrow");
+    const Escrow = await ethers.getContractFactory("EscrowTest");
     escrow = await Escrow.deploy(customer, editor);
     await escrow.waitForDeployment(); 
  });
