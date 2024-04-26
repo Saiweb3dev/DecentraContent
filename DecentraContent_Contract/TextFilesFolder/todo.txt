@@ -1,9 +1,9 @@
 
 //26
-1)Work flow for current DCEX
-2) Dry test for the DCEX and unit test
-3)move the file to contract/test and change name to with extension of test for both DCEX and Escrow
-4)In main try adding the ESCROW to DCEX
+1)Work flow for current DCEX - done
+2) Dry test for the DCEX and unit test - done
+3)move the file to contract/test and change name to with extension of test for both DCEX and Escrow - done
+4)In main try adding the ESCROW to DCEX - done
 //27
 5)Add some more logic like time deadline, amount refund and star rating by customer via function
 6)use chainlink feature
