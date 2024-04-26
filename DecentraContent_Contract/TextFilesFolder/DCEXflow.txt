@@ -1,0 +1,21 @@
+DigitalContentExchange WorkFlow
+
+1) Initialize the token by calling initializeToken function with the parameter of a customer address and editor address
+
+2) The initializeToken function then returns a tokenCounter to use for the rest of the token operation
+
+3) Initialize the not edited file link by calling the initialFileLocation and giving the link and tokenCounter only by the customer
+
+4) The link of the not edited file can be called by calling the getInitialFileLocation only by the editor
+
+5) After editing a sample, the editor can send the preview link by calling previewOfEditedFile with link and tokenCounter
+
+6) The Customer can then call the getPreviewOfEditedFile and then also can approve for minting by calling approveEditedPreview
+
+7) After the approval the editor can mint the token by calling mintEditedToken function with link of edited file and tokenCounter only by the editor
+
+8) The function will safe mint to customer address and also set token uri for the token identification
+
+9) To verify the owner we call isCustomerOwner with tokenCounter and it will return bool as answer
+
+10) To transfer the token owner we can use transferToken with tokenCounter , to address and can only be called by the owner or the customer
