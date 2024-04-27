@@ -12,7 +12,7 @@ import "./EscrowTest.sol";
 contract DCEXwithEscrowTest is ERC721URIStorage {
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
-
+    address payable immutable i_owner;
     // Events
     event AmountReceivedInEscrow(uint256 amount);
     event ProjectTrailAmountSentInEscrow(uint256 amount);
@@ -35,6 +35,7 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     // Constructor initializes the token counter.
     constructor() ERC721("DigitalContentExchange", "DCEX") {
         s_tokenCounter = 0;
+        i_owner = payable(msg.sender);
     }
 
     // Modifiers
