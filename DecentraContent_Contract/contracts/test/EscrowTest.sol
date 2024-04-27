@@ -10,11 +10,7 @@ contract EscrowTest {
     enum State {AWAITING_PAYMENT, AWAITING_PREVIEW, AWAITING_DELIVERY, COMPLETE}
     State public currState;
 
-    // Addresses for the i_customer and editor
-    // address private i_customer = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
-    // address private editor = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
-
-    // Amount received by the contract, made public for external access
+    // Addresses for the customer and editor
     address private customer;
     address private editor;
     uint256 public amountReceived;
@@ -29,18 +25,27 @@ contract EscrowTest {
         
     }
 
-    // Modifier to restrict access to the i_customer
+    // Modifier to restrict access to the customer
     modifier onlycustomer() {
         require(msg.sender == customer, "Only i_customer can call this method");
         _;
     }
     
+    /*
+     * @dev Initializes the escrow process by setting the customer and editor addresses and recording the amount received.
+     * @params _customer The address of the customer.
+     * @params _editor The address of the editor.
+     */
     function InitializePayment(address _customer, address payable _editor) payable external{
         customer = _customer;
         editor = _editor;
-      amountReceived = msg.value;
+        amountReceived = msg.value;
     }
-    // Function to confirm the project and transfer a confirmation amount to the editor
+
+    /**
+     * @dev Transfers a confirmation amount to the editor and updates the contract state to `AWAITING_PREVIEW`.
+     * @return success A boolean indicating the success of the transfer.
+     */
     function ProjectConfirmation() payable external returns(bool) {
         // Ensure the contract is in the correct state
         if(currState != State.AWAITING_PAYMENT){
@@ -63,7 +68,10 @@ contract EscrowTest {
         return success;
     }
 
-    // Function to request a trial and transfer a trial amount to the editor
+    /**
+     * @dev Transfers a preview amount to the editor and updates the contract state to `AWAITING_DELIVERY`.
+     * @return success A boolean indicating the success of the transfer.
+     */
     function ProjectPreview() payable external returns(bool){
         // Ensure the contract is in the correct state
         if(currState != State.AWAITING_PREVIEW){
@@ -84,7 +92,10 @@ contract EscrowTest {
         return success;
     }
 
-    // Function to finalize the project and transfer the remaining amount to the editor
+    /**
+     * @dev Transfers the remaining amount to the editor and updates the contract state to `COMPLETE`.
+     * @return success A boolean indicating the success of the transfer.
+     */
     function ProjectDelivery() payable external returns(bool){
         // Ensure the contract is in the correct state
         if(currState != State.AWAITING_DELIVERY){
@@ -102,4 +113,3 @@ contract EscrowTest {
         return success;
     }
 }
-
