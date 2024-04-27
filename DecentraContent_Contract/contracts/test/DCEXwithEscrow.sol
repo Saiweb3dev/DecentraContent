@@ -9,6 +9,11 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
 
+     //Events
+     event AmountReceivedInEscrow(uint256 amount);
+     event ProjectTrailAmountSentInEscrow(uint256 amount);
+      event ConfirmationAmountSentInEscrow(uint256 amount);
+
     // Struct to hold editor and customer addresses for each token.
     struct TokenInfo {
         address editor;    // Editor's address.
@@ -48,32 +53,34 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
         EscrowTest newEscrow = new EscrowTest();
         newEscrow.InitializePayment{value:msg.value}(_customer, payable(_editor));
         s_tokenInfo[s_tokenCounter] = TokenInfo({editor: _editor, customer: _customer, escrow: newEscrow});
+        uint256 amountReceived = newEscrow.amountReceived();
+        emit AmountReceivedInEscrow(amountReceived);
         return (s_tokenCounter,newEscrow.amountReceived());
     }
 
     // Sets the initial file location of the customer.
-    function initialFileLocation(string memory _fileLocation, uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) returns(uint256) {
+    function initialFileLocation(string memory _fileLocation, uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) returns(bool) {
         s_fileLocation[_tokenCounter] = _fileLocation;
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         bool payment = info.escrow.ProjectConfirmation();
-        if(payment){
- return info.escrow.confirmationAmount();
-        }
-       return 0;
+       return payment;
     }
 
     // Sets the preview of the edited file by the editor.
-    function previewOfEditedFile(string memory _editedFileLocation, uint256 _tokenCounter) public onlyTokenEditor(_tokenCounter) returns(uint256){
+    function previewOfEditedFile(string memory _editedFileLocation, uint256 _tokenCounter) public onlyTokenEditor(_tokenCounter){
         s_editedFileLocation[_tokenCounter] = _editedFileLocation;
-        TokenInfo memory info = s_tokenInfo[_tokenCounter];
-        uint256 payment = info.escrow.ProjectTrial();
-        return payment;
     }
 
     // Function to approve the edited file preview by the customer.
-    function approveEditedPreview(uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
-        s_customerApproval[_tokenCounter] = true;
-    }
+    function approveEditedPreview(uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) returns(bool){
+    // Check if the customer has already approved the edited preview
+    require(!s_customerApproval[_tokenCounter], "Customer has already approved");
+    s_customerApproval[_tokenCounter] = true;
+    TokenInfo memory info = s_tokenInfo[_tokenCounter];
+    bool payment = info.escrow.ProjectPreview();
+    return payment;
+}
+
 
     // Minting the token using ID and URI to customer address.
     function mintEditedToken(uint256 _tokenCounter, string memory _editedFileURI) public onlyTokenEditor(_tokenCounter) returns(bool){
@@ -127,5 +134,26 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     // Checks if a token exists.
     function tokenExists(uint256 _tokenCounter) public view returns (bool) {
         return _tokenCounter <= s_tokenCounter && _tokenCounter > 0 && ownerOf(_tokenCounter) != address(0);
+    }
+
+    function getOwnerOf(uint256 _tokenCounter) public view returns(address){
+        return ownerOf(_tokenCounter);
+    }
+    //for test purpose
+    function getAmountReceivedInEscrow(uint256 _tokenCounter) public view returns(uint256){
+         TokenInfo memory info = s_tokenInfo[_tokenCounter];
+         return info.escrow.amountReceived();
+    }
+    function getConfirmationAmountReceivedInEscrow(uint256 _tokenCounter) public view returns(uint256){
+         TokenInfo memory info = s_tokenInfo[_tokenCounter];
+         return info.escrow.confirmationAmount();
+    }
+    function getPreviewAmountReceivedInEscrow(uint256 _tokenCounter) public view returns(uint256){
+         TokenInfo memory info = s_tokenInfo[_tokenCounter];
+         return info.escrow.previewAmount();
+    }
+    function getTotalAmountSentToEditorInEscrow(uint256 _tokenCounter) public view returns(uint256){
+        TokenInfo memory info = s_tokenInfo[_tokenCounter];
+         return info.escrow.amountSentToEditor();
     }
 }

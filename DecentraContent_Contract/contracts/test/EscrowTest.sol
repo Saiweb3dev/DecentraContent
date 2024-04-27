@@ -18,8 +18,9 @@ contract EscrowTest {
     address private customer;
     address private editor;
     uint256 public amountReceived;
-    uint256 public amountSentToEditor;
     uint256 public confirmationAmount;
+    uint256 public previewAmount;
+    uint256 public amountSentToEditor;
 
     event ConfirmationAmountSent(address indexed editor, uint256 amount);
     event ProjectTrailAmountSent(uint256 amount);
@@ -63,24 +64,24 @@ contract EscrowTest {
     }
 
     // Function to request a trial and transfer a trial amount to the editor
-    function ProjectTrial() payable external returns(uint256){
+    function ProjectPreview() payable external returns(bool){
         // Ensure the contract is in the correct state
         if(currState != State.AWAITING_PREVIEW){
             revert WrongState(currState);
         }
         // Calculate the trial amount
-        uint trialAmount = (amountReceived*20)/100;
+         previewAmount = (amountReceived*20)/100;
         // Transfer the trial amount to the editor
-        bool success = payable(editor).send(trialAmount);
+        bool success = payable(editor).send(previewAmount);
         // Check for transfer success
         require(success, "Transfer failed");
         // Update the remaining amount
-        amountReceived -= trialAmount;
-         amountSentToEditor += trialAmount;
+        amountReceived -= previewAmount;
+         amountSentToEditor += previewAmount;
         // Update the contract state
         currState = State.AWAITING_DELIVERY;
-        emit ProjectTrailAmountSent( trialAmount);
-        return trialAmount;
+        emit ProjectTrailAmountSent( previewAmount);
+        return success;
     }
 
     // Function to finalize the project and transfer the remaining amount to the editor
