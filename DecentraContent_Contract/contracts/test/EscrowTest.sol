@@ -21,9 +21,6 @@ contract EscrowTest {
     event ConfirmationAmountSent(address indexed editor, uint256 amount);
     event ProjectTrailAmountSent(uint256 amount);
 
-    constructor() {
-        
-    }
 
     // Modifier to restrict access to the customer
     modifier onlycustomer() {
