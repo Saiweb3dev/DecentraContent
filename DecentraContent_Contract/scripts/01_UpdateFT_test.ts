@@ -1,6 +1,6 @@
 import hre from "hardhat";
 import fs from "fs";
-
+//npx hardhat run scripts/01_UpdateFT_test.ts
 // Move the function declarations above their usage
 const updateAddress = async (contractAddress: string) => {
  console.log("Updating the contract Address...");
@@ -11,7 +11,12 @@ const updateAddress = async (contractAddress: string) => {
       return;
     }
     const addressJson = JSON.stringify({ [chainId]: contractAddress }, null, 2);
-    fs.writeFileSync(FTE_FILE_ADDRESS, addressJson);
+    const filePath = process.env.FTE_FILE_ADDRESS;
+    if(filePath == undefined) {
+      console.log("File path is undefined. Cannot update contract addresses.");
+      return;
+    }
+    fs.writeFileSync(filePath, addressJson);
  } catch (err) {
     console.log("Error while updating contract address. ", err);
  }
@@ -25,8 +30,13 @@ const updateAbi = async (contractAbi: any) => {
       console.log("Chain ID is undefined. Cannot update contract addresses.");
       return;
     }
-    const addressJson = JSON.stringify({ [chainId]: contractAbi }, null, 2);
-    fs.writeFileSync(FTE_FILE_ABI, addressJson);
+    const addressJson = JSON.stringify( contractAbi , null, 2);
+    const filePath = process.env.FTE_FILE_ABI;
+    if(filePath == undefined) {
+      console.log("File path is undefined. Cannot update contract addresses.");
+      return;
+    }
+    fs.writeFileSync(filePath, addressJson);
  } catch (err) {
     console.log("Error while updating contract address. ", err);
  }
