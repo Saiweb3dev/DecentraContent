@@ -10,6 +10,9 @@ import "./EscrowTest.sol";
  * @dev Contract for managing digital content tokens with escrow functionality.
  */
 contract DCEXwithEscrowTest is ERC721URIStorage {
+
+    //error
+    error AccessDenied(string message);
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
     address payable immutable i_owner;
@@ -18,6 +21,10 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     event ProjectTrailAmountSentInEscrow(uint256 amount);
     event ConfirmationAmountSentInEscrow(uint256 amount);
     event TransferOfToken(address from, address to, uint256 tokenId);
+    event TokenMinted(uint256 tokenId,address owner, string tokenURI);
+    event TokenBurned(uint256 tokenId);
+     event TokenAssigned(uint256 tokenId, address editor, address customer);
+
 
     // Struct to hold editor and customer addresses for each token.
     struct TokenInfo {
@@ -42,13 +49,17 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
 
     // Restrict access to the editor of a specific token.
     modifier onlyTokenEditor(uint256 _tokenCounter) {
-        require(msg.sender == s_tokenInfo[_tokenCounter].editor, "Caller is not the editor");
+        if(msg.sender != s_tokenInfo[_tokenCounter].editor){
+            revert AccessDenied("Caller is not the editor");
+        }
         _;
     }
 
     // Restrict access to the customer of a specific token.
     modifier onlyTokenCustomer(uint256 _tokenCounter) {
-        require(msg.sender == s_tokenInfo[_tokenCounter].customer, "Caller is not the customer");
+        if(msg.sender != s_tokenInfo[_tokenCounter].customer){
+            revert AccessDenied("Caller is not the customer");
+        }
         _;
     }
 
@@ -66,6 +77,7 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
         s_tokenInfo[s_tokenCounter] = TokenInfo({editor: _editor, customer: _customer, escrow: newEscrow});
         uint256 amountReceived = newEscrow.amountReceived();
         emit AmountReceivedInEscrow(amountReceived);
+        emit TokenAssigned(s_tokenCounter, _editor, _customer);
         return (s_tokenCounter,newEscrow.amountReceived());
     }
 
@@ -117,6 +129,7 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
         _setTokenURI(newTokenId, _editedFileURI);
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         bool payment = info.escrow.ProjectDelivery();
+        emit TokenMinted(newTokenId,s_tokenInfo[newTokenId].customer, _editedFileURI);
         return payment;
     }
 
@@ -198,6 +211,7 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     function burnToken(uint256 tokenId) public {
         require(msg.sender == ownerOf(tokenId), "Caller is not owner nor approved");
         _burn(tokenId);
+        emit TokenBurned(tokenId);
     }
 
     /**
@@ -245,4 +259,3 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
         return info.escrow.amountSentToEditor();
     }
 }
-

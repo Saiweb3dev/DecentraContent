@@ -9,6 +9,16 @@
     },
     {
       "type": "error",
+      "name": "AccessDenied",
+      "inputs": [
+        {
+          "type": "string",
+          "name": "message"
+        }
+      ]
+    },
+    {
+      "type": "error",
       "name": "ERC721IncorrectOwner",
       "inputs": [
         {
@@ -204,6 +214,62 @@
         {
           "type": "uint256",
           "name": "amount",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "TokenAssigned",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "tokenId",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "editor",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "customer",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "TokenBurned",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "tokenId",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "TokenMinted",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "tokenId",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "owner",
+          "indexed": false
+        },
+        {
+          "type": "string",
+          "name": "tokenURI",
           "indexed": false
         }
       ]

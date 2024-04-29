@@ -53,9 +53,9 @@ contract EscrowTest {
         confirmationAmount = (amountReceived*10)/100;
         
         // Transfer the confirmation amount to the editor
-        bool success = payable(editor).send(confirmationAmount);
+       (bool success, ) = payable(editor).call{value: confirmationAmount}("");
         // Check for transfer success
-        require(success, "Transfer failed");
+        require(success, "Transfer failed In Project Confirmation");
         // Update the remaining amount
         amountReceived -= confirmationAmount;
         amountSentToEditor += confirmationAmount;
@@ -77,9 +77,9 @@ contract EscrowTest {
         // Calculate the trial amount
          previewAmount = (amountReceived*20)/100;
         // Transfer the trial amount to the editor
-        bool success = payable(editor).send(previewAmount);
+        (bool success, ) = payable(editor).call{value: previewAmount}("");
         // Check for transfer success
-        require(success, "Transfer failed");
+        require(success, "Transfer failed In Project Preview");
         // Update the remaining amount
         amountReceived -= previewAmount;
          amountSentToEditor += previewAmount;
@@ -99,9 +99,9 @@ contract EscrowTest {
             revert WrongState(currState);
         }
         // Transfer the remaining amount to the editor
-        bool success = payable(editor).send(amountReceived);
+         (bool success, ) = payable(editor).call{value: amountReceived}("");
         // Check for transfer success
-        require(success, "Transfer failed");
+        require(success, "Transfer failed In Project Delivery");
         // Reset the amount received
         amountSentToEditor += amountReceived;
         amountReceived = 0;
