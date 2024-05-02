@@ -16,10 +16,10 @@ export const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
   };
 
   return (
-    <div>
-      <div className="flex items-center justify-center mb-6">
+    <div className="flex flex-col items-center justify-center ">
+      <div className="flex flex-col items-center justify-center">
         <button
-          className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full cursor-pointer transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 mr-4"
+          className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-full cursor-pointer transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 mr-4"
           onClick={() => inputFile.current?.click()}
         >
           Select File

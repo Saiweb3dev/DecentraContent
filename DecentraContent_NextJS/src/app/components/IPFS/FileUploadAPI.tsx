@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { copyToClipboard } from "../utils/copyToClipboard";
+import { copyToClipboard } from "../../utils/copyToClipboard";
 
 interface FileUploadAPIProps {
   file: File | null;
@@ -35,9 +35,9 @@ export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({ file }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center space-y-6">
       <button
-        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full cursor-pointer transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+        className="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-full cursor-pointer transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
         disabled={!file || uploading}
         onClick={uploadFile}
       >
