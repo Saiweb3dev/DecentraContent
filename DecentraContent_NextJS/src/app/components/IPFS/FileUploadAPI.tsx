@@ -4,9 +4,10 @@ import { copyToClipboard } from "../../utils/copyToClipboard";
 
 interface FileUploadAPIProps {
   file: File | null;
+  metadata: any;
 }
 
-export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({ file }) => {
+export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({ file, metadata }) => {
   const [cid, setCid] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -17,14 +18,18 @@ export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({ file }) => {
     try {
       setUploading(true);
       setUploadSuccess(false);
-      const data = new FormData();
-      data.set("file", file);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("metadata", JSON.stringify(metadata));
+      console.log("Data Sent to the API:", formData);
+
       const res = await fetch("/api/files", {
         method: "POST",
-        body: data,
+        body: formData,
       });
       const resData = await res.json();
-      setCid(resData.IpfsHash);
+      console.log("Response data:", resData);
+      setCid(resData.metadataIpfsHash);
       setUploadSuccess(true);
       setUploading(false);
     } catch (e) {
@@ -72,11 +77,6 @@ export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({ file }) => {
       {cid && (
         <div className="flex flex-col space-y-6 justify-center items-center">
           <h1 className="text-2xl font-bold text-black">Uploaded File:</h1>
-          <img
-            src={`${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`}
-            alt="Image from IPFS"
-            className="max-w-full h-auto rounded-2xl shadow-lg"
-          />
           <div className="flex items-center">
             <input
               type="text"
