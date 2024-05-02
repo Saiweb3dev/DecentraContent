@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <main className="w-full bg-black">
-      <div className="flex flex-col justify-center items-center mx-auto max-w-5xl h-screen border-2">
+      <div className="flex flex-col justify-center items-center mx-auto max-w-5xl h-fit border-2">
         <div className="flex flex-col space-y-6 justify-center items-center p-6">
           <h1 className="text-6xl font-bold text-pink-500">Decentra Content</h1>
           <h3 className="text-xl font-semibold">Local Image to IPFS Convertor</h3>
