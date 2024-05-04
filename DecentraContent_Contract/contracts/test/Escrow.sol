@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract EscrowTest {
+contract Escrow {
     // Define custom errors for state and transfer failures
     error WrongState(State);
     error TransferFailed();

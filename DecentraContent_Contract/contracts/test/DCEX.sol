@@ -3,19 +3,31 @@ pragma solidity ^0.8.0;
 
 // Import OpenZeppelin's ERC721URIStorage for URI storage functionality.
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "./EscrowTest.sol";
+import "./Escrow.sol";
+import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 
 /**
  * @title DigitalContentExchange
  * @dev Contract for managing digital content tokens with escrow functionality.
  */
-contract DCEXwithEscrowTest is ERC721URIStorage {
+ contract DCEXwithChainlink is ERC721URIStorage, VRFConsumerBaseV2 {
 
     //error
     error AccessDenied(string message);
     // Token counter for unique token identification.
     uint256 private s_tokenCounter;
     address payable immutable i_owner;
+
+    //Chainlink VRF Variables
+    VRFCoordinatorV2Interface private i_vrfCoordinator = VRFCoordinatorV2Interface(0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625);
+    bytes32 private i_keyHash = 0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c;
+    uint64 private i_subId = 11227;
+    uint32 private i_callbackGasLimit = 100000;
+    uint16 private constant REQ_CONFIRMATION = 3;
+    uint32 private constant NUM_VALUE = 1;
+
+
     // Events
     event AmountReceivedInEscrow(uint256 amount);
     event ProjectTrailAmountSentInEscrow(uint256 amount);
@@ -25,12 +37,16 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     event TokenBurned(uint256 tokenId);
      event TokenAssigned(uint256 tokenId, address editor, address customer);
 
+     //Chainlink Events
+     event RequestSent(uint256 requestId, uint32 numWords);
+    event RequestFulfilled(uint256 requestId, uint256 randomWord);
+
 
     // Struct to hold editor and customer addresses for each token.
     struct TokenInfo {
         address editor;    // Editor's address.
         address customer; // Customer's address.
-        EscrowTest escrow; // Store the escrow contract instance for each token
+        Escrow escrow; // Store the escrow contract instance for each token
     }
 
     // Mapping from token ID to TokenInfo.
@@ -39,8 +55,13 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
     mapping(uint256 => string) private s_editedFileLocation;
     mapping(uint256 => bool) private s_customerApproval;
 
+    //Chainlink VRF Mapping
+    mapping(uint256 => uint256) public s_tokenCounterToRandomNumber;
+    mapping(uint256 => uint256) public s_requestIdToTokenCounter;
+
     // Constructor initializes the token counter.
-    constructor() ERC721("DigitalContentExchange", "DCEX") {
+    constructor() ERC721("DigitalContentExchange", "DCEX")
+     VRFConsumerBaseV2(0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625) {
         s_tokenCounter = 0;
         i_owner = payable(msg.sender);
     }
@@ -70,9 +91,9 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
      * @return The token ID and the amount received in escrow.
      */
     function initializeToken(address _customer, address _editor) public payable returns(uint256,uint256) {
-        require(msg.value > 1 ether, "Value must be greater than 1 ether");
+        // require(msg.value > 1 ether, "Value must be greater than 1 ether");
         s_tokenCounter++;
-        EscrowTest newEscrow = new EscrowTest();
+        Escrow newEscrow = new Escrow();
         newEscrow.InitializePayment{value:msg.value}(_customer, payable(_editor));
         s_tokenInfo[s_tokenCounter] = TokenInfo({editor: _editor, customer: _customer, escrow: newEscrow});
         uint256 amountReceived = newEscrow.amountReceived();
@@ -113,6 +134,7 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
         s_customerApproval[_tokenCounter] = true;
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         bool payment = info.escrow.ProjectPreview();
+        requestRandomWords(_tokenCounter);
         return payment;
     }
 
@@ -124,13 +146,29 @@ contract DCEXwithEscrowTest is ERC721URIStorage {
      */
     function mintEditedToken(uint256 _tokenCounter, string memory _editedFileURI) public onlyTokenEditor(_tokenCounter) returns(bool){
         require(s_customerApproval[_tokenCounter], "Customer approval is required");
-        uint256 newTokenId = _tokenCounter; // Use the existing token counter as the new token ID
+        uint256 randomWord = s_tokenCounterToRandomNumber[_tokenCounter];
+        uint256 newTokenId = uint256(keccak256(abi.encodePacked(_tokenCounter, randomWord))); // Use the existing token counter as the new token ID
         _safeMint(s_tokenInfo[newTokenId].customer, newTokenId);
         _setTokenURI(newTokenId, _editedFileURI);
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         bool payment = info.escrow.ProjectDelivery();
         emit TokenMinted(newTokenId,s_tokenInfo[newTokenId].customer, _editedFileURI);
         return payment;
+    }
+
+    //Chainlink VRF Specific functions
+    function requestRandomWords(uint256 _tokenCounter) internal returns(uint256 requestId){
+        requestId = i_vrfCoordinator.requestRandomWords(i_keyHash,i_subId,REQ_CONFIRMATION,i_callbackGasLimit,NUM_VALUE);
+        s_requestIdToTokenCounter[requestId] = _tokenCounter;
+        emit RequestSent(requestId,NUM_VALUE);
+        return requestId;
+    }
+
+    function fulfillRandomWords(uint256 _requestId, uint256[] memory _randomWords) internal override {
+        uint256 tokenCounter = s_requestIdToTokenCounter[_requestId];
+        uint256 randomWord = _randomWords[0];
+        s_tokenCounterToRandomNumber[tokenCounter] = randomWord;
+        emit RequestFulfilled(_requestId, randomWord);
     }
 
     /**
