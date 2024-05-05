@@ -1,7 +1,7 @@
 
 
 Final Goal:
-- Create a decentralized platform for exchanging various types of digital content (documents, music, videos, 3D models, etc.) between creators, editors, and buyers.
+- +
 - Provide a secure, transparent, and efficient marketplace for monetizing and trading digital assets.
 
 Protocols Used:
