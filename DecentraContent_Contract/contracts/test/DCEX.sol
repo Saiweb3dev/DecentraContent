@@ -111,8 +111,8 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
     function initialFileLocation(string memory _fileLocation, uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) returns(bool) {
         s_fileLocation[_tokenCounter] = _fileLocation;
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
-        bool payment = info.escrow.ProjectConfirmation();
-        return payment;
+        info.escrow.ProjectConfirmation();
+        return true;
     }
 
     /**
@@ -133,9 +133,9 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
         require(!s_customerApproval[_tokenCounter], "Customer has already approved");
         s_customerApproval[_tokenCounter] = true;
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
-        bool payment = info.escrow.ProjectPreview();
+         info.escrow.ProjectPreview();
         requestRandomWords(_tokenCounter);
-        return payment;
+        return true;
     }
 
     /**
@@ -262,29 +262,9 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
     }
 
     // For test purposes
-    function getAmountReceivedInEscrow(uint256 _tokenCounter) public view returns    (uint256){
+    function getAmountReceivedInEscrow(uint256 _tokenCounter) public view returns(uint256){
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         return info.escrow.amountReceived();
-    }
-
-    /**
-     * @dev Retrieves the confirmation amount received in escrow for a token.
-     * @param _tokenCounter The token ID.
-     * @return The confirmation amount received in escrow.
-     */
-    function getConfirmationAmountReceivedInEscrow(uint256 _tokenCounter) public view returns(uint256){
-        TokenInfo memory info = s_tokenInfo[_tokenCounter];
-        return info.escrow.confirmationAmount();
-    }
-
-    /**
-     * @dev Retrieves the preview amount received in escrow for a token.
-     * @param _tokenCounter The token ID.
-     * @return The preview amount received in escrow.
-     */
-    function getPreviewAmountReceivedInEscrow(uint256 _tokenCounter) public view returns(uint256){
-        TokenInfo memory info = s_tokenInfo[_tokenCounter];
-        return info.escrow.previewAmount();
     }
 
     /**
