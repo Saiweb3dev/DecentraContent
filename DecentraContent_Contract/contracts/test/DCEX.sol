@@ -36,9 +36,10 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
     event TokenMinted(uint256 tokenId,address owner, string tokenURI);
     event TokenBurned(uint256 tokenId);
      event TokenAssigned(uint256 tokenId, address editor, address customer);
+     event RefundStatus(uint256 tokenCounter,bool status);
 
      //Chainlink Events
-     event RequestSent(uint256 requestId, uint32 numWords);
+    event RequestSent(uint256 requestId, uint32 numWords);
     event RequestFulfilled(uint256 requestId, uint256 randomWord);
 
 
@@ -191,6 +192,16 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         TokenInfo memory info = s_tokenInfo[_tokenCounter];
         return (info.editor, info.customer, address(info.escrow));
+    }
+
+    function callForRefund(uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) {
+        TokenInfo memory info = s_tokenInfo[_tokenCounter];
+        bool refund = info.escrow.RequestRefund();
+        if(refund == true){
+            emit RefundStatus(_tokenCounter,refund);
+        }else{
+             emit RefundStatus(_tokenCounter,refund);
+        }
     }
     
     /**
