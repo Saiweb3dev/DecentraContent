@@ -4,7 +4,7 @@ const main = async () => {
   const chainId = await hre.getChainId(); // Get the chain ID
   console.log("Chain ID:", chainId); // Log the chain ID
 
-  const DCEX_Factory = await hre.ethers.getContractFactory("DCEXwithEscrowTest");
+  const DCEX_Factory = await hre.ethers.getContractFactory("DCEXwithChainlink");
   const DCEX = await DCEX_Factory.deploy();
   const tx = await DCEX.deploymentTransaction()?.wait();
   console.log("Gas used:", tx?.gasUsed.toString());

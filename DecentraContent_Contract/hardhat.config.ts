@@ -38,7 +38,15 @@ const config: HardhatUserConfig = {
     outDir: "typechain",
     target: "ethers-v6",
  },
- solidity: "0.8.24",
+ solidity: {
+ version: "0.8.24",
+ settings: {
+  optimizer: {
+    enabled: true,
+    runs: 200 // Adjust the runs value as needed
+  },
+},
+ },
  gasReporter: {
     currency: 'USD',
     gasPrice: 21,
