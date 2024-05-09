@@ -7,6 +7,16 @@
   },
   {
     "type": "error",
+    "name": "AccessDenied",
+    "inputs": [
+      {
+        "type": "string",
+        "name": "message"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "ERC721IncorrectOwner",
     "inputs": [
       {
@@ -94,6 +104,20 @@
       {
         "type": "uint256",
         "name": "tokenId"
+      }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "OnlyCoordinatorCanFulfill",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "have"
+      },
+      {
+        "type": "address",
+        "name": "want"
       }
     ]
   },
@@ -202,6 +226,113 @@
       {
         "type": "uint256",
         "name": "amount",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "RefundStatus",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenCounter",
+        "indexed": false
+      },
+      {
+        "type": "bool",
+        "name": "status",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "RequestFulfilled",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "requestId",
+        "indexed": false
+      },
+      {
+        "type": "uint256",
+        "name": "randomWord",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "RequestSent",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "requestId",
+        "indexed": false
+      },
+      {
+        "type": "uint32",
+        "name": "numWords",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "TokenAssigned",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "editor",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "customer",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "TokenBurned",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": false
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "anonymous": false,
+    "name": "TokenMinted",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "tokenId",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "owner",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "tokenURI",
         "indexed": false
       }
     ]
@@ -319,6 +450,19 @@
   },
   {
     "type": "function",
+    "name": "callForRefund",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "_tokenCounter"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
     "name": "getAmountReceivedInEscrow",
     "constant": true,
     "stateMutability": "view",
@@ -357,25 +501,6 @@
   },
   {
     "type": "function",
-    "name": "getConfirmationAmountReceivedInEscrow",
-    "constant": true,
-    "stateMutability": "view",
-    "payable": false,
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "_tokenCounter"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "uint256",
-        "name": ""
-      }
-    ]
-  },
-  {
-    "type": "function",
     "name": "getInitialFileLocation",
     "constant": true,
     "stateMutability": "view",
@@ -408,25 +533,6 @@
     "outputs": [
       {
         "type": "address",
-        "name": ""
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "name": "getPreviewAmountReceivedInEscrow",
-    "constant": true,
-    "stateMutability": "view",
-    "payable": false,
-    "inputs": [
-      {
-        "type": "uint256",
-        "name": "_tokenCounter"
-      }
-    ],
-    "outputs": [
-      {
-        "type": "uint256",
         "name": ""
       }
     ]
@@ -658,6 +764,61 @@
       }
     ],
     "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "rawFulfillRandomWords",
+    "constant": false,
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "requestId"
+      },
+      {
+        "type": "uint256[]",
+        "name": "randomWords"
+      }
+    ],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "s_requestIdToTokenCounter",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "s_tokenCounterToRandomNumber",
+    "constant": true,
+    "stateMutability": "view",
+    "payable": false,
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ],
+    "outputs": [
+      {
+        "type": "uint256",
+        "name": ""
+      }
+    ]
   },
   {
     "type": "function",

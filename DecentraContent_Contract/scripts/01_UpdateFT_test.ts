@@ -45,7 +45,7 @@ const updateAbi = async (contractAbi: any) => {
 const main = async () => {
  if (process.env.UPDATE_FTE == "true") {
     console.log("Process Started.......");
-    const contract = await hre.deployments.get("DCEXwithEscrowTest");
+    const contract = await hre.deployments.get("DCEX");
     const contractAddress = contract.address;
     await updateAddress(contractAddress);
     console.log("Contract Address Updated -> ", contractAddress);
