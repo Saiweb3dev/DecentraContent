@@ -11,7 +11,7 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
  * @title DigitalContentExchange
  * @dev Contract for managing digital content tokens with escrow functionality.
  */
- contract DCEXwithChainlink is ERC721URIStorage, VRFConsumerBaseV2 {
+ contract DCEX is ERC721URIStorage, VRFConsumerBaseV2 {
 
     //error
     error AccessDenied(string message);
