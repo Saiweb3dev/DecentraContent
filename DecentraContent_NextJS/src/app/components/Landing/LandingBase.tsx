@@ -1,4 +1,5 @@
 import React from 'react';
+import InitializeContract from '../Contract/InitializeToken';
 
 const LandingPage = () => {
  return (
@@ -25,6 +26,7 @@ const LandingPage = () => {
           </a>
         </div>
       </div>
+      <InitializeContract/>
     </div>
  );
 };
