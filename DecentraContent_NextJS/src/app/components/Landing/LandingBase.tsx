@@ -1,5 +1,5 @@
 import React from 'react';
-import InitializeContract from '../Contract/InitializeToken';
+import Link from 'next/link';
 
 const LandingPage = () => {
  return (
@@ -18,15 +18,14 @@ const LandingPage = () => {
           >
             Explore the Contract
           </a>
-          <a
-            href="#features"
+          <Link
+            href="/DecentralizedExchange"
             className="px-6 py-3 font-bold text-pink-600 bg-transparent border-2 border-pink-600 rounded-full hover:bg-pink-600 hover:text-white transition-colors duration-300"
           >
-            Learn More
-          </a>
+            Try it out
+          </Link>
         </div>
       </div>
-      <InitializeContract/>
     </div>
  );
 };
