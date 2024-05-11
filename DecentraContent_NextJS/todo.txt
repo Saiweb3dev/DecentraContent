@@ -1,0 +1,15 @@
+Frontend TODO:
+
+1) A Page for signing up as a Editor or Customer 
+note: learn how cookie work and use it 
+
+2) If Customer then show the page contain of Editor
+note: staticly make some data about the editor and show
+
+3) have a button in editor profile like Initialize token ,which lead to page to intialize the token and get the tokenId
+
+4)a specific dashboard like setup for custom with all the necessary function and disable future function
+
+5)same specific dashboard for editor
+
+6)IPFS should have both image to hash and json to hash
