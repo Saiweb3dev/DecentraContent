@@ -17,14 +17,24 @@ const page : React.FC = () => {
     console.log(`Selected role: ${role}`);
   };
   return (
-    <div className='w-full h-auto'>
-    <div className='flex flex-col justify-center items-center max-w-5xl mx-auto p-6'>
-    <button className='bg-pink-600 px-4 py-2 rounded-lg text-white w-64' onClick={() => handleRoleSelection('Customer')}>Customer</button>
-      <button className='bg-pink-600 px-4 py-2 rounded-lg text-white w-64' onClick={() => handleRoleSelection('Editor')}>Editor</button>
-    {selectedRole && <p>You selected: {selectedRole}</p>}
-      {/* <InitializeContract/> */}
-    </div>
-    </div>
+    <div className="flex items-center justify-center min-h-screen w-full bg-black">
+  <div className="flex flex-col justify-center items-center max-w-5xl mx-auto p-6">
+    <button
+      className="relative bg-white text-pink-600 font-semibold py-3 px-8 rounded-lg mb-4 w-64 overflow-hidden transition-all duration-300 hover:bg-pink-600 hover:text-white hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-50"
+      onClick={() => handleRoleSelection('Customer')}
+    >
+      <span className="relative z-10">Customer</span>
+      <div className="absolute top-0 left-0 w-full h-full bg-pink-600 opacity-0 transition-all duration-300 transform -translate-x-full group-hover:opacity-100 group-hover:translate-x-0"></div>
+    </button>
+    <button
+      className="relative bg-white text-black font-semibold py-3 px-8 rounded-lg w-64 overflow-hidden transition-all duration-300 hover:bg-pink-600 hover:text-white hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+      onClick={() => handleRoleSelection('Editor')}
+    >
+      <span className="relative z-10">Editor</span>
+      <div className="absolute top-0 left-0 w-full h-full bg-purple-600 opacity-0 transition-all duration-300 transform -translate-x-full group-hover:opacity-100 group-hover:translate-x-0"></div>
+    </button>
+  </div>
+</div>
   )
 }
 
