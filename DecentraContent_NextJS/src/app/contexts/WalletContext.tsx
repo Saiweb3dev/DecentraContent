@@ -50,6 +50,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   // Connect the wallet when the user clicks the "Connect Wallet" button
   const connectWallet = async () => {
     if (window.ethereum) {
+      console.log("Wallet connection triggered")
       try {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const web3Instance = new Web3(window.ethereum);
