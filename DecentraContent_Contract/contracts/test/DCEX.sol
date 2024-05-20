@@ -33,6 +33,7 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
     event ProjectTrailAmountSentInEscrow(uint256 amount);
     event ConfirmationAmountSentInEscrow(uint256 amount);
     event TransferOfToken(address from, address to, uint256 tokenId);
+    event EditedFilePreview(uint256 indexed _tokenCounter, string indexed _tokenLocation);
     event TokenMinted(uint256 tokenId,address owner, string tokenURI);
     event TokenBurned(uint256 tokenId);
      event TokenAssigned(uint256 tokenId, address editor, address customer);
@@ -221,6 +222,7 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
      */
     function getPreviewOfEditedFile(uint256 _tokenCounter) public view onlyTokenCustomer(_tokenCounter) returns(string memory) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
+        emit EditedFilePreview(_tokenCounter, s_editedFileLocation[_tokenCounter]);
         return s_editedFileLocation[_tokenCounter];
     }
 
