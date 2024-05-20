@@ -22,10 +22,10 @@ const Token_InputForm: React.FC<InputFormProps> = ({
   handleContractCall,
 }) => {
   return (
-    <div className="flex flex-col justify-center items-center space-y-6 bg-pink-600 rounded-lg border-2 p-6">
+    <div className="flex flex-col justify-center items-left space-y-6 bg-black rounded-lg border-2 border-pink-600 p-6">
       <label className="text-xl font-semibold">Enter the Address of Editor</label>
       <input
-        className="text-white placeholder:text-white bg-black p-2 rounded-lg"
+        className="text-pink-600 border-2 border-pink-600 placeholder:text-white bg-black p-2 rounded-lg"
         type="text"
         placeholder="Enter Editor Address"
         value={editorAddress}
@@ -33,7 +33,7 @@ const Token_InputForm: React.FC<InputFormProps> = ({
       />
       <label className="text-xl font-semibold">Enter the Address of Customer</label>
       <input
-        className="text-white placeholder:text-white bg-black p-2 rounded-lg"
+        className="text-pink-600 border-2 border-pink-600 placeholder:text-white bg-black p-2 rounded-lg"
         type="text"
         placeholder="Enter Customer Address"
         value={customerAddress}
@@ -41,7 +41,7 @@ const Token_InputForm: React.FC<InputFormProps> = ({
       />
       <label className="text-xl font-semibold">Enter the Amount in ETH</label>
       <input
-        className="text-white placeholder:text-white bg-black p-2 rounded-lg"
+        className="text-pink-600 border-2 border-pink-600 placeholder:text-white bg-black p-2 rounded-lg"
         type="number"
         step="any"
         min="0"
@@ -50,7 +50,7 @@ const Token_InputForm: React.FC<InputFormProps> = ({
         onChange={(e) => setAmountInEth(e.target.value)}
       />
       <button
-        className="text-xl bg-black hover:bg-gray-900 duration-200 p-2 rounded-lg w-full"
+        className="text-xl bg-pink-600 font-semibold hover:bg-pink-500 duration-200 p-2 rounded-lg w-full"
         onClick={handleContractCall}
       >
         Initialize

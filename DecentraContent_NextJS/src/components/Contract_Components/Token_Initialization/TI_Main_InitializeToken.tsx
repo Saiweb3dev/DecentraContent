@@ -106,7 +106,7 @@ const InitializeContract: React.FC = () => {
 
   // Render the component UI
   return (
-    <div className="flex flex-col justify-center items-center space-y-6 mt-6">
+    <div className="flex flex-col max-w-5xl mx-auto h-fit bg-black rounded-lg border-2 p-6 justify-center items-center space-y-6 my-12">
       {/* Title and description */}
       <h1 className="text-center">
         <span className="text-3xl font-bold">Initialize Token</span>
@@ -128,7 +128,7 @@ const InitializeContract: React.FC = () => {
           handleContractCall={handleContractCall}
         />
         {/* Section for displaying token information */}
-        <div className="flex flex-col justify-center items-left bg-pink-600 space-y-6 p-4 border-2 rounded-lg">
+        <div className="flex flex-col justify-center items-left bg-black space-y-6 p-4 border-2 rounded-lg">
           <Token_InformationDisplay tokenData={tokenData} />
           <Get_TokenInfo_Button
             handleGetTokenInfo={handleGetTokenInfo}

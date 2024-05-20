@@ -9,7 +9,7 @@ interface GetTokenInfoButtonProps {
 const Get_TokenInfo_Button: React.FC<GetTokenInfoButtonProps> = ({ handleGetTokenInfo, tokenId }) => {
   return (
     <button
-      className="text-xl bg-black hover:bg-gray-900 duration-200 p-2 rounded-lg w-full"
+      className="text-xl bg-pink-600 font-semibold hover:bg-pink-500 duration-200 p-2 rounded-lg w-full"
       onClick={handleGetTokenInfo}
       disabled={!tokenId}
     >

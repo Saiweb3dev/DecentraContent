@@ -13,7 +13,7 @@ interface TokenInformationDisplayProps {
 
 const Token_InformationDisplay: React.FC<TokenInformationDisplayProps> = ({ tokenData }) => {
   return (
-    <div className="flex flex-col justify-center items-left bg-pink-600 space-y-6 p-4 border-2 rounded-lg">
+    <div className="flex flex-col justify-center items-left bg-black border-pink-600 space-y-6 p-4 border-2 rounded-lg">
       <span className="text-3xl font-bold">Token Information</span>
       {tokenData.tokenId && <p className="text-white">Token ID: {tokenData.tokenId}</p>}
       {tokenData.address1 && <p className="text-white">Editor Address : {tokenData.address1}</p>}
