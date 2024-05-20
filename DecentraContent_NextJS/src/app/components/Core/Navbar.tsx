@@ -1,11 +1,11 @@
-"use client"
-import React, { useContext, useState } from 'react';
-import Link from 'next/link';
-import { WalletContext } from '@/app/contexts/WalletContext';
-import Web3 from 'web3';
+"use client";
+import { WalletContext } from "@/contexts/WalletContext";
+import Link from "next/link";
+import React, { useContext, useState } from "react";
 
 const Navbar: React.FC = () => {
-  const { accountDetails, connectWallet, disconnectWallet } = useContext(WalletContext);
+  const { accountDetails, connectWallet, disconnectWallet } =
+    useContext(WalletContext);
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
@@ -26,13 +26,22 @@ const Navbar: React.FC = () => {
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link href="/" className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <Link
+                  href="/"
+                  className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
                   Home
                 </Link>
-                <Link href="/IpfsConvertor" className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <Link
+                  href="/IpfsConvertor"
+                  className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
                   IpfsConvertor
                 </Link>
-                <Link href="/contact" className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                <Link
+                  href="/contact"
+                  className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
                   Contact
                 </Link>
               </div>
@@ -40,11 +49,17 @@ const Navbar: React.FC = () => {
           </div>
           <div>
             {accountDetails.account ? (
-              <button onClick={handleShowModal} className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+              <button
+                onClick={handleShowModal}
+                className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
                 Show Wallet Details
               </button>
             ) : (
-              <button onClick={connectWallet} className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+              <button
+                onClick={connectWallet}
+                className="text-white hover:bg-black hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
                 Connect Wallet
               </button>
             )}
@@ -60,10 +75,16 @@ const Navbar: React.FC = () => {
             <p>Network: {accountDetails.network}</p>
             <p>Balance: {accountDetails.balance} ETH</p>
             <div className="mt-4">
-              <button onClick={disconnectWallet} className="bg-red-700 text-white px-4 py-2 rounded-md mr-2">
+              <button
+                onClick={disconnectWallet}
+                className="bg-red-700 text-white px-4 py-2 rounded-md mr-2"
+              >
                 Disconnect Wallet
               </button>
-              <button onClick={handleCloseModal} className="bg-black text-white px-4 py-2 rounded-md">
+              <button
+                onClick={handleCloseModal}
+                className="bg-black text-white px-4 py-2 rounded-md"
+              >
                 Close
               </button>
             </div>

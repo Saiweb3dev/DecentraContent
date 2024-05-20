@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import Web3 from 'web3';
-import { WalletContext } from '../contexts/WalletContext';
-import { abi, contractAddressVar } from '../../../constant/index';
+import { useContext, useEffect, useState } from "react";
+import Web3 from "web3";
+import { abi, contractAddressVar } from "../../../constant/index";
+import { WalletContext } from "../../contexts/WalletContext";
 
 const contractAddress = contractAddressVar as { [key: string]: string };
 
@@ -11,16 +11,23 @@ const useInitializeContract = () => {
 
   useEffect(() => {
     const initializeContract = async () => {
-      if (accountDetails.account && typeof window !== 'undefined' && window.ethereum) {
+      if (
+        accountDetails.account &&
+        typeof window !== "undefined" &&
+        window.ethereum
+      ) {
         try {
           const web3 = new Web3(window.ethereum);
-          const contractInstance = new web3.eth.Contract(abi, contractAddress["31337"]);
+          const contractInstance = new web3.eth.Contract(
+            abi,
+            contractAddress["31337"]
+          );
           setContract(contractInstance);
         } catch (error) {
-          console.error('Error initializing contract:', error);
+          console.error("Error initializing contract:", error);
         }
       } else {
-        console.error('Web3 provider or account not available');
+        console.error("Web3 provider or account not available");
       }
     };
 
@@ -41,15 +48,16 @@ const useContract = () => {
   ) => {
     if (contract && accountDetails.account) {
       try {
-        const tx = await contract.methods[functionName](...(params || []))
-          .send({ from: accountDetails.account, value: value || '0' });
+        const tx = await contract.methods[functionName](...(params || [])).send(
+          { from: accountDetails.account, value: value || "0" }
+        );
         return tx;
       } catch (error) {
         console.error(`Error calling ${functionName}:`, error);
         throw error;
       }
     } else {
-      console.error('Contract or account not initialized');
+      console.error("Contract or account not initialized");
     }
   };
 
