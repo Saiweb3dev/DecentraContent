@@ -1,4 +1,4 @@
-import Home from "../components/IPFS/IpfsBase";
+import Home from "../../components/IPFS/IpfsBase";
 
 function page() {
   return (

@@ -1,4 +1,4 @@
-import InitializeContract from "@/app/components/Contract/Token_Initialization/TI_Main_InitializeToken";
+import InitializeContract from "@/components/Contract_Components/Token_Initialization/TI_Main_InitializeToken";
 
 function page() {
   return (

@@ -7,7 +7,10 @@ interface FileUploadAPIProps {
   metadata: any;
 }
 
-export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({ file, metadata }) => {
+export const FileUploadAPI: React.FC<FileUploadAPIProps> = ({
+  file,
+  metadata,
+}) => {
   const [cid, setCid] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);

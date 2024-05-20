@@ -1,7 +1,7 @@
 // Public_Functions/GetTokenInfo.tsx
-import React from 'react';
-import useViewContract from '../../../hooks/useViewContract'; // Import useViewContract instead of useContract
-import Web3 from 'web3';
+import React from "react";
+import Web3 from "web3";
+import useViewContract from "../../../hooks/useViewContract"; // Import useViewContract instead of useContract
 
 interface TokenInfo {
   editor: string | null;
@@ -24,31 +24,31 @@ const GetTokenInfo: React.FC<GetTokenInfoProps> = ({ tokenId }) => {
   const handleGetTokenInfo = async () => {
     try {
       if (tokenId) {
-        console.log('Calling getTokenInfo with tokenId:', tokenId);
+        console.log("Calling getTokenInfo with tokenId:", tokenId);
         const tokenIdBN = Web3.utils.toBigInt(tokenId);
         // Call the view function using callViewContractFunction
         const result = await callViewContractFunction(
-          'getTokenInfo',
+          "getTokenInfo",
           [tokenIdBN], // Pass the token ID as a BigNumber
           undefined, // No Ether value is sent for view functions
           true // Indicating this is a view function
         );
-        
-        console.log('Result In Get Token Info:', result);
+
+        console.log("Result In Get Token Info:", result);
 
         // Assuming result is an array with the expected values
         if (Array.isArray(result) && result.length === 3) {
           const [editor, customer, escrow] = result;
-          console.log('Token Info:', editor, customer, escrow);
+          console.log("Token Info:", editor, customer, escrow);
           setTokenInfo({ editor, customer, escrow });
         } else {
-          console.error('Unexpected return value from getTokenInfo');
+          console.error("Unexpected return value from getTokenInfo");
         }
       } else {
-        console.log('tokenId is null or undefined');
+        console.log("tokenId is null or undefined");
       }
     } catch (error) {
-      console.error('Error getting token info:', error);
+      console.error("Error getting token info:", error);
     }
   };
 
