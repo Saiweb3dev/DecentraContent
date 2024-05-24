@@ -220,7 +220,7 @@ import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
      * @param _tokenCounter The token ID.
      * @return The location of the edited file preview.
      */
-    function getPreviewOfEditedFile(uint256 _tokenCounter) public view onlyTokenCustomer(_tokenCounter) returns(string memory) {
+    function getPreviewOfEditedFile(uint256 _tokenCounter) public onlyTokenCustomer(_tokenCounter) returns(string memory) {
         require(_tokenCounter <= s_tokenCounter, "Invalid token ID");
         emit EditedFilePreview(_tokenCounter, s_editedFileLocation[_tokenCounter]);
         return s_editedFileLocation[_tokenCounter];
