@@ -211,6 +211,23 @@
     {
       "type": "event",
       "anonymous": false,
+      "name": "EditedFilePreview",
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "_tokenCounter",
+          "indexed": true
+        },
+        {
+          "type": "string",
+          "name": "_tokenLocation",
+          "indexed": true
+        }
+      ]
+    },
+    {
+      "type": "event",
+      "anonymous": false,
       "name": "MetadataUpdate",
       "inputs": [
         {
@@ -542,8 +559,7 @@
     {
       "type": "function",
       "name": "getPreviewOfEditedFile",
-      "constant": true,
-      "stateMutability": "view",
+      "constant": false,
       "payable": false,
       "inputs": [
         {

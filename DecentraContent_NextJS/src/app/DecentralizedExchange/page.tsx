@@ -18,6 +18,7 @@ const page : React.FC = () => {
   };
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-black">
+      <h1 className='text-4xl font-bold'>Select you role</h1>
   <div className="flex flex-col justify-center items-center max-w-5xl mx-auto p-6">
     <button
       className="relative bg-white text-pink-600 font-semibold py-3 px-8 rounded-lg mb-4 w-64 overflow-hidden transition-all duration-300 hover:bg-pink-600 hover:text-white hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-50"
